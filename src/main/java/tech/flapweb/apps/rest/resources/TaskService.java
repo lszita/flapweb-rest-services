@@ -11,6 +11,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import tech.flapweb.apps.rest.beans.JWTVerifierProvider;
 import tech.flapweb.apps.rest.entities.Task;
 
 @Path("task")
@@ -18,7 +19,7 @@ public class TaskService {
     
     @Inject 
     EntityManager em;
-    
+       
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
@@ -29,8 +30,10 @@ public class TaskService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(@Valid TaskService t){
-        //persist entity...
+    public Response create(@Valid Task t){
+        em.getTransaction().begin();
+        em.persist(t);
+        em.getTransaction().commit();
         return Response.ok().entity(t).build();
     }
     

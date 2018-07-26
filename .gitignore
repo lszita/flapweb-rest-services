@@ -1,4 +1,4 @@
-
+src/main/resources/app.properties
 nbactions.xml
 nb-configuration.xml
 flapweb-sso-service.iml

@@ -1,6 +1,9 @@
 package tech.flapweb.apps.rest.extensions;
 
-import javax.validation.ConstraintViolation;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -17,11 +20,15 @@ public class RequestValidator implements ExceptionMapper<ConstraintViolationExce
                        .build();
     }
  
-    private String prepareMessage(ConstraintViolationException exception) {
-        String msg = "{\"Bad Request\":\"";
-        for (ConstraintViolation<?> cv : exception.getConstraintViolations()) {
-            msg+=  cv.getMessage() + ", ";
-        }
-        return msg.substring(0, msg.length() - 2) + "\"}";
+    private JsonObject prepareMessage(ConstraintViolationException exception) {
+        
+        JsonObjectBuilder responseObjectBuilder = Json.createObjectBuilder();
+        JsonArrayBuilder errors = Json.createArrayBuilder();
+        exception.getConstraintViolations().forEach(v -> errors.add(v.getMessage()));
+        responseObjectBuilder
+                .add("status", "error")
+                .add("errors", errors.build());
+        
+        return responseObjectBuilder.build();
     }
 }

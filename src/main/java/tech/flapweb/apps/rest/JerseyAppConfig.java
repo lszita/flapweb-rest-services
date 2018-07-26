@@ -8,19 +8,22 @@ import org.glassfish.jersey.process.internal.RequestScoped;
 import org.glassfish.jersey.server.ResourceConfig;
 import tech.flapweb.apps.rest.beans.EntityManagerFactoryProvider;
 import tech.flapweb.apps.rest.beans.EntityManagerProvider;
+import tech.flapweb.apps.rest.beans.JWTVerifierProvider;
 
 @ApplicationPath("resources")
 public class JerseyAppConfig extends ResourceConfig {
     public JerseyAppConfig(){
         register(new JerseyAppBinder());
         packages("tech.flapweb.apps.rest.resources");
+        packages("tech.flapweb.apps.rest.extensions");
     }
 }
 
-class JerseyAppBinder extends AbstractBinder {
+class JerseyAppBinder extends AbstractBinder{
     @Override
     protected void configure() {
         bindFactory(EntityManagerProvider.class).to(EntityManager.class).in(RequestScoped.class);
         bindFactory(new EntityManagerFactoryProvider()).to(EntityManagerFactory.class);
+        bind(new JWTVerifierProvider()).to(JWTVerifierProvider.class);
     }
 }
