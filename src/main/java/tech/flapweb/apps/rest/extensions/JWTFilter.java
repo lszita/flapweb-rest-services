@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,8 @@ public class JWTFilter implements ContainerRequestFilter{
         try {
             DecodedJWT jwt = vp.getVerifier().verify(token);
             LOGGER.info("Token sub: {}", jwt.getSubject());
+            LOGGER.info("USER: {}", ctx.getUriInfo().getPathParameters().getFirst("userId"));
+            LOGGER.info("PATH: {}", ctx.getUriInfo().getPath());
         } catch (JWTVerificationException ex){
             LOGGER.error("Invalid token",ex);
             ctx.abortWith(Response.status(Response.Status.UNAUTHORIZED).build());
