@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.SafeHtml;
 
 @Entity
 @NamedQueries({
@@ -19,8 +20,10 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull( message="title cannot be empty" )
+    @SafeHtml( message="invalid html markup")
     private String title;
     @NotNull( message="details cannot be empty" )
+    @SafeHtml( message="invalid html markup")
     private String details;
     private Boolean completed = false;
     @NotNull( message="owner id cannot be null" )
