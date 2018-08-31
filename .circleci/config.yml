@@ -1,0 +1,73 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+
+    docker:
+      - image: circleci/openjdk:8-jdk
+          
+    working_directory: ~/flapweb-rest-services
+    
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v2-dependencies-{{ checksum "pom.xml" }}
+          # fallback to using the latest cache if no exact match is found
+          - v2-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v2-dependencies-{{ checksum "pom.xml" }}
+        
+      # run tests!
+      - run: mvn package
+
+      - store_test_results:  
+          path: target/surefire-reports
+
+      - store_artifacts:
+          path: target/flapweb-rest-services.war
+
+      - save_cache:
+          key: v2-war-cache
+          paths: 
+            - target/flapweb-rest-services.war
+
+
+
+
+  deploy:
+   machine: 
+     enabled: true
+   working_directory: ~/flapweb-rest-services
+   steps:
+     - restore_cache:
+         keys:
+           v2-war-cache
+
+     - run:
+         name: Deploy Over SSH
+         command: | 
+            scp -r ~/flapweb-rest-services/target/flapweb-rest-services.war "$SSH_USER@$SSH_HOST:$SSH_DEPLOY_PATH"
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+        - build
+        - deploy:
+            requires:
+              - build
+            filters:
+              branches: 
+                only: master
