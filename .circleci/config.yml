@@ -17,16 +17,16 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v2-dependencies-{{ checksum "pom.xml" }}
+          - v3-dependencies-{{ checksum "pom.xml" }}
           # fallback to using the latest cache if no exact match is found
-          - v2-dependencies-
+          - v3-dependencies-
 
       - run: mvn dependency:go-offline
 
       - save_cache:
           paths:
             - ~/.m2
-          key: v2-dependencies-{{ checksum "pom.xml" }}
+          key: v3-dependencies-{{ checksum "pom.xml" }}
         
       # run tests!
       - run: mvn package
@@ -38,7 +38,7 @@ jobs:
           path: target/flapweb-rest-services.war
 
       - save_cache:
-          key: v2-war-cache
+          key: v3-war-cache
           paths: 
             - target/flapweb-rest-services.war
 
@@ -52,7 +52,7 @@ jobs:
    steps:
      - restore_cache:
          keys:
-           v2-war-cache
+           v3-war-cache
 
      - run:
          name: Deploy Over SSH
