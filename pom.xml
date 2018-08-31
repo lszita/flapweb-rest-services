@@ -10,7 +10,7 @@
     <name>flapweb-rest-services</name>
 
     <build>
-        <finalName>flapweb-sso-service</finalName>
+        <finalName>flapweb-rest-services</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
