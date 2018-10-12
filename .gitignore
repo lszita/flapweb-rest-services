@@ -1,7 +1,7 @@
-src/main/resources/app.properties
+app.properties
 nbactions.xml
 nb-configuration.xml
-flapweb-sso-service.iml
-jetty-env.xml
+datasource.xml
 target/
 .idea/
+test-keys/

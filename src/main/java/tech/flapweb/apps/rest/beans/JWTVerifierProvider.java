@@ -37,13 +37,13 @@ public class JWTVerifierProvider {
     private void setupVerifier(){
         try {
             Properties properties = new Properties();
-            InputStream input = JWTVerifierProvider.class.getClassLoader().getResourceAsStream(PROPERTIES_RESOURCE);
-            if(input == null){
+            File propsFile = new File(PROPERTIES_RESOURCE);
+            if(!propsFile.exists()){
                 String path = System.getenv("jetty_base") + "/resources/" + PROPERTIES_RESOURCE;
                 LOGGER.info("from file {}", path);
-                input = new FileInputStream(new File(path));
+                propsFile = (new File(path));
             }
-            properties.load(input);
+            properties.load(new FileInputStream(propsFile));
         
             byte[] publicKeyBytes = Files.readAllBytes(Paths.get(properties.getProperty("ssl.pub.location")));
             X509EncodedKeySpec publicSpec = new X509EncodedKeySpec(publicKeyBytes);
