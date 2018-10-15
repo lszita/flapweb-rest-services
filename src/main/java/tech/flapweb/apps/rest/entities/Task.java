@@ -26,12 +26,12 @@ public class Task implements Serializable {
     
     @NotNull( message="title cannot be empty" )
     @SafeHtml( message="invalid html markup")
-    @Size(min = 1, max = 16, message = "Title must be 3-16 characters")
+    @Size(min = 3, max = 16, message = "Title must be 3-16 characters")
     private String title;
     
     @NotNull( message="details cannot be empty" )
     @SafeHtml( message="invalid html markup")
-    @Size(min = 3, max = 256, message = "Details must be 3-256 characters")
+    @Size(max = 256, message = "Details must be 3-256 characters")
     private String details;
     
     private Boolean completed = false;
