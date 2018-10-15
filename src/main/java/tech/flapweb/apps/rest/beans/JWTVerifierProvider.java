@@ -39,7 +39,7 @@ public class JWTVerifierProvider {
             Properties properties = new Properties();
             File propsFile = new File(PROPERTIES_RESOURCE);
             if(!propsFile.exists()){
-                String path = System.getenv("jetty_base") + "/resources/" + PROPERTIES_RESOURCE;
+                String path = System.getProperty("jetty.base") + "/resources/" + PROPERTIES_RESOURCE;
                 LOGGER.info("from file {}", path);
                 propsFile = (new File(path));
             }
