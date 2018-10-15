@@ -38,10 +38,9 @@ jobs:
           path: target/flapweb-rest-services.war
 
       - save_cache:
-          key: v3-war-cache
+          key: k-{{ .BuildNum }}-war-cache
           paths: 
             - target/flapweb-rest-services.war
-
 
 
 
@@ -52,7 +51,7 @@ jobs:
    steps:
      - restore_cache:
          keys:
-           v3-war-cache
+           - k-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}-war-cache
 
      - run:
          name: Deploy Over SSH
