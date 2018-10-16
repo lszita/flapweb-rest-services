@@ -28,10 +28,13 @@ public class UserTaskService {
     
     @Inject 
     EntityManager em;
+    
+    @Context 
+    UriInfo uri;
        
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Task> findAll(@Context UriInfo uri) {
+    public List<Task> findAll() {
         String owner = uri.getPathParameters().getFirst("userId");
         return em.createNamedQuery("Task.findByOwner").setParameter("owner", owner).getResultList();
     }
@@ -40,6 +43,7 @@ public class UserTaskService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(@Valid Task t){
+        t.setOwner(uri.getPathParameters().getFirst("userId"));
         em.getTransaction().begin();
         em.persist(t);
         em.getTransaction().commit();
